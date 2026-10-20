@@ -37,9 +37,10 @@ export function OtpInput({
           onChange={(e) => {
             const ch = e.target.value.replace(/\D/g, "");
             if (ch.length > 1) return commit(ch);
+            if (!ch) return onChange(value.slice(0, i) + value.slice(i + 1));
             const arr = value.split("");
-            arr[i] = ch;
-            commit(arr.join("").slice(0, i + 1) + (ch ? value.slice(i + 1) : ""));
+            arr[Math.min(i, value.length)] = ch;
+            commit(arr.join(""));
           }}
           onKeyDown={(e) => {
             if (e.key === "Backspace" && !d.trim() && i > 0) {
