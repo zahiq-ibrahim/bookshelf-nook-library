@@ -1,4 +1,4 @@
-import { forwardRef, useState } from "react";
+import { forwardRef, useEffect, useState } from "react";
 import { useBookSearch } from "@/hooks/useBookSearch";
 import { Api, parseApiError } from "@/lib/api";
 import { authorsText, yearText, type SavedBook, type SearchResult } from "@/lib/books";
@@ -16,12 +16,14 @@ function Thumb({ url, title }: { url: string | null; title: string }) {
 
 function PreviewDialog({ result, onClose }: { result: SearchResult; onClose: () => void }) {
   const [state, setState] = useState<{ loading: boolean; data: SearchResult | null; error: string }>({ loading: true, data: null, error: "" });
-  useState(() => {
+  useEffect(() => {
+    let alive = true;
     if (!result.openLibraryId) { setState({ loading: false, data: result, error: "" }); return; }
     Api.searchById(result.openLibraryId)
-      .then((d) => setState({ loading: false, data: d ?? result, error: "" }))
-      .catch((e) => setState({ loading: false, data: result, error: parseApiError(e).message }));
-  });
+      .then((d) => alive && setState({ loading: false, data: d ?? result, error: "" }))
+      .catch((e) => alive && setState({ loading: false, data: result, error: parseApiError(e).message }));
+    return () => { alive = false; };
+  }, [result]);
   const d = state.data;
   const title = d?.title || result.title || "Untitled";
   return (
