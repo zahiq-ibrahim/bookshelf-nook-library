@@ -1,29 +1,14 @@
-# Welcome to your Lovable project
+# The Book Cabinet — frontend
 
-This project was built with [Lovable](https://lovable.dev).
+Frontend for the Book Library API: email-OTP signup, login, password reset, and a personal library drawn as a wooden book cabinet.
 
-## Build with Lovable
+## Setup
+1. `bun install`
+2. Copy `.env.example` to `.env` and set `VITE_API_BASE_URL` (default `http://localhost:3000`, no trailing slash).
+3. `bun run dev`, then open the printed URL.
 
-Open your project in the [Lovable editor](https://lovable.dev) and keep building.
-
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: connect the project to GitHub and every change made in Lovable is committed straight to your repository.
-- **Full ownership**: this code is yours. Push to your repository and your changes sync back into Lovable, ready for your next prompt.
-
-## Development
-
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
-
-```sh
-git clone <this-repository-url>
-cd <repository-name>
-npm i
-npm run dev
-```
-
-## Built with
-
-- TanStack Start
-- TypeScript
-- React
-- Tailwind CSS
+## Notes
+- Two HTTP clients (`src/lib/api.ts`): `/api/v1/*` (sends the Bearer token) and the root client for the public `/library/:userId`.
+- The backend must allow CORS for this frontend's origin. If it doesn't, the app shows "Cannot reach server".
+- Share links: set the backend `APP_URL` to this frontend's origin, otherwise visitors open the API and see raw JSON.
+- The token lives in `localStorage`; logout just deletes it.
