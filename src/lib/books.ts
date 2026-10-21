@@ -30,6 +30,10 @@ export interface ShelfBook {
   color: string | null;
   numberOfPages: number | null;
   publishYear: number | null;
+  /** Optional extras — present when the public library includes them. */
+  coverUrl?: string | null;
+  caption?: string | null;
+  read?: boolean | null;
 }
 
 export interface ShelfLibrary {
@@ -53,13 +57,16 @@ export const savedToShelf = (b: SavedBook): ShelfBook => ({
 });
 
 export const normalizeLibrary = (l: Partial<ShelfLibrary> | null | undefined): ShelfLibrary => {
-  const books = (l?.books ?? []).map((b) => ({
-    id: String(b.id),
+  const books = (l?.books ?? []).map((b: ShelfBook & { coverColor?: string | null; _id?: string }) => ({
+    id: String(b.id ?? b._id),
     title: b.title || "Untitled",
     authors: Array.isArray(b.authors) ? b.authors : [],
-    color: b.color ?? null,
+    color: b.color ?? b.coverColor ?? null,
     numberOfPages: b.numberOfPages ?? null,
     publishYear: b.publishYear ?? null,
+    coverUrl: b.coverUrl ?? null,
+    caption: b.caption ?? null,
+    read: typeof b.read === "boolean" ? b.read : null,
   }));
   return {
     libraryName: l?.libraryName || "My library",

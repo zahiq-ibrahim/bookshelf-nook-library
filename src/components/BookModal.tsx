@@ -138,15 +138,17 @@ export function SummaryModal({ shelf, onClose }: { shelf: ShelfBook; onClose: ()
   return (
     <Modal label={shelf.title} onClose={onClose}>
       <div className="book-detail">
-        <Cover color={color} title={shelf.title} />
+        <Cover url={shelf.coverUrl} color={color} title={shelf.title} />
         <div className="book-detail__info">
           <h2 className="book-detail__title">{shelf.title}</h2>
           <p className="muted">{authorsText(shelf.authors)}</p>
           <dl className="facts">
             <dt>Published</dt><dd>{yearText(shelf.publishYear)}</dd>
             <dt>Pages</dt><dd>{shelf.numberOfPages ?? "—"}</dd>
+            <dt>Status</dt><dd>{shelf.read == null ? "—" : shelf.read ? <span className="badge badge--read">Read</span> : <span className="badge">Not read yet</span>}</dd>
             <dt>Colour</dt><dd><Swatch color={color} /></dd>
           </dl>
+          <blockquote className="book-caption">{shelf.caption || <em className="muted">No personal caption.</em>}</blockquote>
         </div>
       </div>
       <div className="modal__actions"><span className="spacer" /><button className="btn btn--ghost" onClick={onClose}>Close</button></div>
