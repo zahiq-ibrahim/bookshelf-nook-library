@@ -133,7 +133,20 @@ export function BookModal({
 }
 
 /** Public popup: summary only (get-book is protected). */
-export function SummaryModal({ shelf, onClose }: { shelf: ShelfBook; onClose: () => void }) {
+export function SummaryModal({ shelf: base, onClose }: { shelf: ShelfBook; onClose: () => void }) {
+  const [full, setFull] = useState<SavedBook | null>(null);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    let alive = true;
+    Api.getBook(base.id)
+      .then((b) => { if (alive && b) setFull(b); })
+      .catch(() => {})
+      .finally(() => alive && setLoading(false));
+    return () => { alive = false; };
+  }, [base.id]);
+  const shelf: ShelfBook = full
+    ? { ...base, coverUrl: full.coverUrl ?? base.coverUrl, caption: full.caption ?? base.caption, read: full.read ?? base.read, color: full.coverColor ?? base.color }
+    : base;
   const color = normalizeColor(shelf.color);
   return (
     <Modal label={shelf.title} onClose={onClose}>
@@ -142,6 +155,7 @@ export function SummaryModal({ shelf, onClose }: { shelf: ShelfBook; onClose: ()
         <div className="book-detail__info">
           <h2 className="book-detail__title">{shelf.title}</h2>
           <p className="muted">{authorsText(shelf.authors)}</p>
+          {loading && <p className="loading-row"><Spinner /> Loading details…</p>}
           <dl className="facts">
             <dt>Published</dt><dd>{yearText(shelf.publishYear)}</dd>
             <dt>Pages</dt><dd>{shelf.numberOfPages ?? "—"}</dd>
