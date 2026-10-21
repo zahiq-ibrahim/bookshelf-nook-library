@@ -4,7 +4,7 @@ Frontend for the Book Library API: email-OTP signup, login, password reset, and 
 
 ## Setup
 1. `bun install`
-2. Copy `.env.example` to `.env` and set `VITE_API_BASE_URL` (default `http://localhost:3000`, no trailing slash).
+2. Copy `.env.example` to `.env` and set `VITE_API_BASE_URL` (default `https://d-r4va.onrender.com`, no trailing slash).
 3. `bun run dev`, then open the printed URL.
 
 ## Notes
