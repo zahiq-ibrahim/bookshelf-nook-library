@@ -3,7 +3,7 @@ import type { SearchResult, SavedBook, ShelfLibrary } from "./books";
 
 /** Base URL of the Book Library API (no trailing slash). */
 export const API_BASE_URL = (
-  (import.meta.env.VITE_API_BASE_URL as string | undefined) || "http://localhost:3000"
+  (import.meta.env.VITE_API_BASE_URL as string | undefined) || "https://d-r4va.onrender.com"
 ).replace(/\/+$/, "");
 
 const TOKEN_KEY = "bookLibrary.token";
