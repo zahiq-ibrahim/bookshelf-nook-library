@@ -20,12 +20,11 @@ export function Spine({ book, onOpen, isNew }: { book: ShelfBook; onOpen: (b: Sh
       aria-label={`${book.title} by ${author}`}
       title={`${book.title} — ${author}`}
     >
+      <span className="spine__year" aria-hidden>{yearText(book.publishYear)}</span>
       <span className="spine__rule spine__rule--double" aria-hidden />
       <span className="spine__title" aria-hidden>{book.title}</span>
       <span className="spine__rule" aria-hidden />
-      <span className="spine__meta" aria-hidden>
-        {author.split(",")[0]} · {yearText(book.publishYear)}
-      </span>
+      <span className="spine__meta" aria-hidden>{author}</span>
     </button>
   );
 }

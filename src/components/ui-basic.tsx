@@ -24,11 +24,13 @@ export function Modal({
   label, onClose, children, size = "md",
 }: { label: string; onClose: () => void; children: ReactNode; size?: "sm" | "md" }) {
   const ref = useRef<HTMLDivElement>(null);
+  const closeRef = useRef(onClose);
+  closeRef.current = onClose;
   useEffect(() => {
     const prev = document.activeElement as HTMLElement | null;
     ref.current?.focus();
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") { e.stopPropagation(); onClose(); }
+      if (e.key === "Escape") { e.stopPropagation(); closeRef.current(); }
     };
     document.addEventListener("keydown", onKey);
     document.body.style.overflow = "hidden";
@@ -37,7 +39,7 @@ export function Modal({
       document.body.style.overflow = "";
       prev?.focus?.();
     };
-  }, [onClose]);
+  }, []);
   return (
     <div className="backdrop" onMouseDown={(e) => e.target === e.currentTarget && onClose()}>
       <div ref={ref} tabIndex={-1} role="dialog" aria-modal="true" aria-label={label} className={`modal modal--${size}`}>
